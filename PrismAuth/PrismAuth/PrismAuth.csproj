@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="PrismAuth.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\ContextConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
