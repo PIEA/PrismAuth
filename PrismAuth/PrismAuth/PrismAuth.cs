@@ -8,7 +8,9 @@ using MiNET.Plugins;
 using MiNET.Plugins.Attributes;
 using System.IO;
 using PrismAuth.Util;
-using PrismAuth.Auth;
+using PrismAuth.Account;
+using Newtonsoft.Json;
+using PrismAuth.Cryptography;
 
 namespace PrismAuth
 {
@@ -16,32 +18,35 @@ namespace PrismAuth
         PluginName = "PrismAuth", PluginVersion = "v0.1")]
     public class PrismAuth : Plugin
     {
-        public AuthPlayers AuthList => this._authList;
-        private AuthPlayers _authList;
+        public event EventHandler<PlayerEventArgs> PlayerLogined;
+
+        public List<Player> LoginedPlayer { get; private set; }
+
+        protected virtual void OnPlayerlogined(PlayerEventArgs e)
+        {
+            PlayerLogined?.Invoke(this, e);
+        }
 
         protected override void OnEnable()
         {
+            IO.AppendDirectory();
+            this.LoginedPlayer = new List<Player>();
+            PlayerLogined += PrismAuth_PlayerLogined;
 
-            this.Context.Server.PlayerFactory.PlayerCreated += (sender, e) =>
-            {
-                e.Player.PlayerJoin += Player_PlayerJoin;
-            };
-            base.OnEnable();
+            var path = Path.Combine(IO.GetAccountDirectoryPath(), $"sepiiiiii.json");
+            var authPlayer = new PlayerAccount() { Name = "sepiiiiii", EncryptedPassword = AES.EncryptString("1234qwer") };
+            File.WriteAllText(path, JsonConvert.SerializeObject(authPlayer), Encoding.Unicode);
         }
 
-        private void Player_PlayerJoin(object sender, PlayerEventArgs e)
+        private void PrismAuth_PlayerLogined(object sender, PlayerEventArgs e)
         {
-            
-            while (true)
-            {
-                AuthPlayer playerData = new AuthPlayer(e.Player.Username);
-
-            }
+            this.LoginedPlayer.Add(e.Player);
         }
 
         public override void OnDisable()
         {
-            base.OnDisable();
         }
+
+
     }
 }

@@ -7,21 +7,37 @@ using MiNET;
 using MiNET.Plugins;
 using MiNET.Plugins.Attributes;
 using PrismAuth;
+using PrismAuth.Account;
+using PrismAuth.Cryptography;
 
 namespace PrismAuth.Commands
 {
     public class RegisterCommand : PrismAuth
     {
-        [Command]
+        [Command(Name = "reg")]
         public void Register(Player commander)
         {
 
         }
 
-        [Command]
+        [Command(Name = "reg")]
         public void Register(Player commander, string password)
         {
-            var username = commander.Username;
+            commander.SendMessage("this is register command.");
+            if (AccountManager.IsRegistered(commander.Username))
+            {
+                commander.SendMessage("you are already registered.");
+                return;
+            }
+
+            if (AccountManager.Add(commander.Username, password))
+            {
+                commander.SendMessage("successfully registered.");
+            }
+            else
+            {
+                commander.SendMessage("failed to register.");
+            }
         }
     }
 }

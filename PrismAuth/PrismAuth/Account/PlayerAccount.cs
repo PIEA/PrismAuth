@@ -1,0 +1,19 @@
+﻿using MiNET;
+using PrismAuth.Cryptography;
+using PrismAuth.Util;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PrismAuth.Account
+{
+
+    public class PlayerAccount
+    {
+        public string Name { get; set; }
+        public EncryptResult EncryptedPassword { get; set; }
+    }
+}
