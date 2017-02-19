@@ -10,5 +10,6 @@ namespace PrismAuth.Util
     sealed class ContextConstants
     {
         public const string prefix = "[§6PrismAuth§f]";
+        public const string AuthPlayerDirectory = "AuthPlayers";
     }
 }
