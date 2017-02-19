@@ -1,6 +1,5 @@
 ﻿using MiNET;
 using Newtonsoft.Json;
-using PrismAuth.Cryptography;
 using PrismAuth.Util;
 using System;
 using System.Collections;
@@ -10,7 +9,7 @@ using System.Text;
 
 namespace PrismAuth.Account
 {
-    public class AccountManager
+    public static class AccountManager
     {
         public static bool Add(string userName, string password)
         {
@@ -19,13 +18,13 @@ namespace PrismAuth.Account
             try
             {
                 var path = Path.Combine(IO.GetAccountDirectoryPath(), $"{userName}.json");
-                var authPlayer = new PlayerAccount() { Name = userName, EncryptedPassword = AES.EncryptString(password) };
-                using (StreamWriter file = new StreamWriter(path, false, Encoding.Unicode))
+                if (TryEncryptPassword(password, out string digest))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Serialize(file, authPlayer);
+                    var authPlayer = new PlayerAccount() { Name = userName, Digest = digest };
+                    var json = JsonConvert.SerializeObject(authPlayer, Formatting.Indented);
+                    @File.WriteAllText(path, json, Encoding.Unicode);
+                    completed = true;
                 }
-                completed = true;
             }
             catch (Exception)
             {
@@ -68,6 +67,31 @@ namespace PrismAuth.Account
             return false;
         }
 
+        public static bool VerifyPassword(Player target, string password)
+        {
+            var verify = false;
+
+            IO.AppendDirectory();
+            var path = Path.Combine(IO.GetAccountDirectoryPath(), $"{target.Username}.json");
+            if (File.Exists(path))
+            {
+                PlayerAccount account = null;
+                using (StreamReader file = new StreamReader(path, Encoding.Unicode))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
+                }
+
+                if (account != null)
+                {
+                    verify = VerifyDigest(password, account.Digest);
+                }
+            }
+
+            return verify;
+        }
+
+        /*
         public static List<PlayerAccount> GetAuthPlayerFromDirectory()
         {
             IO.AppendDirectory();
@@ -86,6 +110,35 @@ namespace PrismAuth.Account
 
             }
             return accounts;
+        }
+        */
+        private static bool TryEncryptPassword(string passwd, out string digest)
+        {
+            digest = null;
+            try
+            {
+                digest = BCrypt.Net.BCrypt.HashPassword(passwd, 11);
+            }
+            catch (BCrypt.Net.SaltParseException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool VerifyDigest(string passwd, string digest)
+        {
+            var verify = false;
+            try
+            {
+                verify = BCrypt.Net.BCrypt.Verify(passwd, digest);
+            }
+            catch (BCrypt.Net.SaltParseException)
+            {
+                return false;
+            }
+            return verify;
         }
     }
 }

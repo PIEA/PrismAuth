@@ -8,7 +8,6 @@ using MiNET.Plugins;
 using MiNET.Plugins.Attributes;
 using PrismAuth;
 using PrismAuth.Account;
-using PrismAuth.Cryptography;
 
 namespace PrismAuth.Commands
 {

@@ -1,5 +1,4 @@
 ﻿using MiNET;
-using PrismAuth.Cryptography;
 using PrismAuth.Util;
 using System;
 using System.Collections.Generic;
@@ -14,6 +13,6 @@ namespace PrismAuth.Account
     public class PlayerAccount
     {
         public string Name { get; set; }
-        public EncryptResult EncryptedPassword { get; set; }
+        public string Digest { get; set; }
     }
 }
