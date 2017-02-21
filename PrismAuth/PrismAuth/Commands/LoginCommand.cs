@@ -12,13 +12,13 @@ namespace PrismAuth.Commands
 {
     public class LoginCommand : PrismAuth
     {
-        [Command]
+        [Command(Name = "login")]
         public void Login(Player commander)
         {
             commander.SendMessage("/login (password)");
         }
 
-        [Command]
+        [Command(Name = "login")]
         public void Login(Player commander, string password)
         {
             if (this.LoginedPlayer.Exists(x => x == commander.Username))
