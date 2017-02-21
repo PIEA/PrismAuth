@@ -40,7 +40,7 @@ namespace PrismAuth
         {
             if (!this.LoginedPlayer.Contains(e.Player.Username))
             {
-                e.Player.SendMessage("make sure you log in first.");
+                e.Player.SendMessage("please log in first.");
                 e.Cancel = true;
             }
         }
@@ -49,7 +49,7 @@ namespace PrismAuth
         {
             if (!this.LoginedPlayer.Contains(e.Player.Username))
             {
-                e.Player.SendMessage("make sure you log in first.");
+                e.Player.SendMessage("please sure you log in first.");
                 e.Cancel = true;
             }
         }
