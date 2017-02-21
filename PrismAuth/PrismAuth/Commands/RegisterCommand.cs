@@ -13,13 +13,13 @@ namespace PrismAuth.Commands
 {
     public class RegisterCommand : PrismAuth
     {
-        [Command]
+        [Command(Name = "reg")]
         public void Register(Player commander)
         {
-            commander.SendMessage("/register (password)");
+            commander.SendMessage("/reg (password)");
         }
 
-        [Command]
+        [Command(Name = "reg")]
         public void Register(Player commander, string password)
         {
             commander.SendMessage("this is register command.");
