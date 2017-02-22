@@ -14,18 +14,18 @@ namespace PrismAuth.Util
 
         public static string GetAccountDirectoryPath()
         {
-            var path = Path.Combine(assembly, ContextConstants.DirectoryName);
+            var path = Path.Combine(Path.GetDirectoryName(assembly), ContextConstants.DirectoryName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            return new Uri(path).LocalPath;
+            return Path.GetFullPath(path);
         }
 
         public static string GetFilePath(string fileName)
         {
-            return new Uri(Path.Combine(GetAccountDirectoryPath(), fileName)).LocalPath;
+            return Path.GetFullPath(Path.Combine(GetAccountDirectoryPath(), fileName));
         }
     }
 }

@@ -11,7 +11,7 @@ using PrismAuth.Account;
 
 namespace PrismAuth.Commands
 {
-    public class RegisterCommand : PrismAuth
+    public class RegisterCommand
     {
         [Command(Name = "reg")]
         public void Register(Player commander)

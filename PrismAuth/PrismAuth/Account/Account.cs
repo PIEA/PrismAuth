@@ -10,13 +10,15 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Account
 {
-    public class AccountManager
+    public class Account
     {
-        private List<string> loginedPlayer;
+        public static Account Manager { get; } = new Account();
 
-        public AccountManager()
+        public static List<string> LoginedPlayer { get; set; }
+
+        private Account()
         {
-            this.loginedPlayer = new List<string>();
+            LoginedPlayer = new List<string>();
         }
 
         public async Task<bool> RegisterPlayerAsync(Player player, string password)
@@ -26,7 +28,7 @@ namespace PrismAuth.Account
 
             if (completed)
             {
-                this.loginedPlayer.Add(player.Username);
+                LoginedPlayer.Add(player.Username);
             }
             return completed;
         }
@@ -38,19 +40,14 @@ namespace PrismAuth.Account
 
             if (completed)
             {
-                this.loginedPlayer.Add(player.Username);
+                LoginedPlayer.Add(player.Username);
             }
             return completed;
         }
 
-        public bool IsLogined(Player player)
+        public static bool IsLogined(Player player)
         {
-            return this.loginedPlayer.Exists(x => x == player.Username);
-        }
-
-        public void DisconnectPlayer(Player player)
-        {
-            this.loginedPlayer.Remove(player.Username);
+            return LoginedPlayer.Exists(x => x == player.Username);
         }
 
         public async Task<bool> IsRegisteredAsync(Player player)
@@ -75,11 +72,6 @@ namespace PrismAuth.Account
 
                 return false;
             });
-        }
-
-        public List<string> GetLoginedPlayers()
-        {
-            return this.loginedPlayer;
         }
 
         private bool AddPlayer(string userName, string password)
