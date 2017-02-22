@@ -13,6 +13,11 @@ namespace PrismAuth
 {
     public class PacketHandler : PrismAuth
     {
-
+        [PacketHandler]
+        public Package HandlePlayerChat(McpeText packet, Player target)
+        {
+            packet.Reset();
+            return packet;
+        }
     }
 }

@@ -20,23 +20,24 @@ namespace PrismAuth.Commands
         }
 
         [Command(Name = "reg")]
-        public void Register(Player commander, string password)
+        public async void RegisterAsync(Player commander, string password)
         {
             commander.SendMessage("this is register command.");
-            if (AccountManager.IsRegistered(commander.Username))
+            if (await this.AccountManager.IsRegisteredAsync(commander))
             {
                 commander.SendMessage("you are already registered.");
                 return;
             }
-
-            if (AccountManager.Add(commander.Username, password))
-            {
-                commander.SendMessage("successfully registered.");
-                this.LoginedPlayer.Add(commander.Username);
-            }
             else
             {
-                commander.SendMessage("failed to register.");
+                if (await this.AccountManager.RegisterPlayerAsync(commander, password))
+                {
+                    commander.SendMessage("successfully registered.");
+                }
+                else
+                {
+                    commander.SendMessage("failed to register.");
+                }
             }
         }
     }

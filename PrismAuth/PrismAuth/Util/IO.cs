@@ -10,21 +10,22 @@ namespace PrismAuth.Util
 {
     public class IO
     {
-        private static string assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
+        private static string assembly = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase)).LocalPath;
 
-        public static void AppendDirectory()
+        public static string GetAccountDirectoryPath()
         {
-            var path = GetAccountDirectoryPath();
-
+            var path = Path.Combine(assembly, ContextConstants.DirectoryName);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
+
+            return new Uri(path).LocalPath;
         }
 
-        public static string GetAccountDirectoryPath()
+        public static string GetFilePath(string fileName)
         {
-            return Path.Combine(new Uri(Path.GetDirectoryName(assembly)).LocalPath, ContextConstants.DirectoryName);
+            return new Uri(Path.Combine(GetAccountDirectoryPath(), fileName)).LocalPath;
         }
     }
 }

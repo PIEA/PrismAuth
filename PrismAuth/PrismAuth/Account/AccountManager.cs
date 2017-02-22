@@ -6,73 +6,132 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace PrismAuth.Account
 {
-    public static class AccountManager
+    public class AccountManager
     {
-        public static bool Add(string userName, string password)
+        private List<string> loginedPlayer;
+
+        public AccountManager()
         {
-            IO.AppendDirectory();
+            this.loginedPlayer = new List<string>();
+        }
+
+        public async Task<bool> RegisterPlayerAsync(Player player, string password)
+        {
+            var task = Task.Run(() => AddPlayer(player.Username, password));
+            var completed = await task;
+
+            if (completed)
+            {
+                this.loginedPlayer.Add(player.Username);
+            }
+            return completed;
+        }
+
+        public async Task<bool> LoginPlayerAsync(Player player, string password)
+        {
+            var task = Task.Run(() => VerifyPassword(player.Username, password));
+            var completed = await task;
+
+            if (completed)
+            {
+                this.loginedPlayer.Add(player.Username);
+            }
+            return completed;
+        }
+
+        public bool IsLogined(Player player)
+        {
+            return this.loginedPlayer.Exists(x => x == player.Username);
+        }
+
+        public void DisconnectPlayer(Player player)
+        {
+            this.loginedPlayer.Remove(player.Username);
+        }
+
+        public async Task<bool> IsRegisteredAsync(Player player)
+        {
+            return await Task.Run(() =>
+            {
+                var path = IO.GetFilePath(player.Username + ".json");
+                if (File.Exists(path))
+                {
+                    PlayerAccount account = null;
+                    using (StreamReader file = new StreamReader(path, Encoding.Unicode))
+                    {
+                        JsonSerializer serializer = new JsonSerializer();
+                        account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
+                    }
+
+                    if (account != null)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        public List<string> GetLoginedPlayers()
+        {
+            return this.loginedPlayer;
+        }
+
+        private bool AddPlayer(string userName, string password)
+        {
             var completed = false;
             try
             {
-                var path = Path.Combine(IO.GetAccountDirectoryPath(), $"{userName}.json");
+                
+                var path = IO.GetFilePath(userName + ".json");
+                if (!File.Exists(path))
+                {
+                    File.Create(path);
+                }
                 if (TryEncryptPassword(password, out string digest))
                 {
-                    var authPlayer = new PlayerAccount() { Name = userName, Digest = digest };
-                    var json = JsonConvert.SerializeObject(authPlayer, Formatting.Indented);
-                    @File.WriteAllText(path, json, Encoding.Unicode);
+                    var account = new PlayerAccount() { Password = digest };
+                    var json = JsonConvert.SerializeObject(account, Formatting.Indented);
+                    File.WriteAllText(path, json, Encoding.Unicode);
                     completed = true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 completed = false;
             }
 
             return completed;
         }
 
-        public static void Remove(string userName)
+        private void RemovePlayer(string userName)
         {
-            IO.AppendDirectory();
-            var path = Path.Combine(IO.GetAccountDirectoryPath(), $"{userName}.json");
+            var path = IO.GetFilePath(userName + ".json");
             if (File.Exists(path))
             {
                 File.Delete(path);
             }
         }
 
-        public static bool IsRegistered(string userName)
+        private async Task RemoveAsync(string userName)
         {
-            IO.AppendDirectory();
-            var path = Path.Combine(IO.GetAccountDirectoryPath(), $"{userName}.json");
-            if (File.Exists(path))
-            {
-                PlayerAccount account = null;
-                using (StreamReader file = new StreamReader(path, Encoding.Unicode))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
+            var task = Task.Run(() => RemovePlayer(userName));
 
-                }
-
-                if (account != null)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            await task;
+            return;
         }
 
-        public static bool VerifyPassword(Player target, string password)
+        private bool VerifyPassword(string targetName, string password)
         {
             var verify = false;
 
-            IO.AppendDirectory();
-            var path = Path.Combine(IO.GetAccountDirectoryPath(), $"{target.Username}.json");
+            var path = IO.GetFilePath(targetName + ".json");
             if (File.Exists(path))
             {
                 PlayerAccount account = null;
@@ -84,35 +143,14 @@ namespace PrismAuth.Account
 
                 if (account != null)
                 {
-                    verify = VerifyDigest(password, account.Digest);
+                    verify = VerifyDigest(password, account.Password);
                 }
             }
 
             return verify;
         }
 
-        /*
-        public static List<PlayerAccount> GetAuthPlayerFromDirectory()
-        {
-            IO.AppendDirectory();
-            var files = Directory.GetFiles(IO.GetAccountDirectoryPath());
-
-            List<PlayerAccount> accounts = new List<PlayerAccount>();
-            foreach (var fileName in files)
-            {
-                var path = Path.Combine(IO.GetAccountDirectoryPath(), fileName);
-                using (StreamReader file = new StreamReader(path, Encoding.Unicode))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    PlayerAccount account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
-                    accounts.Add(account);
-                }
-
-            }
-            return accounts;
-        }
-        */
-        private static bool TryEncryptPassword(string passwd, out string digest)
+        private bool TryEncryptPassword(string passwd, out string digest)
         {
             digest = null;
             try
@@ -127,7 +165,7 @@ namespace PrismAuth.Account
             return true;
         }
 
-        private static bool VerifyDigest(string passwd, string digest)
+        private bool VerifyDigest(string passwd, string digest)
         {
             var verify = false;
             try

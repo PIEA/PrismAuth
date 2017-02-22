@@ -12,7 +12,6 @@ namespace PrismAuth.Account
 
     public class PlayerAccount
     {
-        public string Name { get; set; }
-        public string Digest { get; set; }
+        public string Password { get; set; }
     }
 }

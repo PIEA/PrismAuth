@@ -18,15 +18,16 @@ namespace PrismAuth
         PluginName = "PrismAuth", PluginVersion = "v0.1")]
     public class PrismAuth : Plugin
     {
-        public List<string> LoginedPlayer { get; protected set; } 
+        public AccountManager AccountManager { get => this._accountManager; }
+        private AccountManager _accountManager;
 
         protected override void OnEnable()
         {
-            IO.AppendDirectory();
-            this.LoginedPlayer = new List<string>();
+            this._accountManager = new AccountManager();
             this.Context.Server.PlayerFactory.PlayerCreated += PlayerFactory_PlayerCreated;
 
             this.Context.Server.LevelManager.LevelCreated += LevelManager_LevelCreated;
+
             base.OnEnable();
         }
 
@@ -38,7 +39,7 @@ namespace PrismAuth
 
         private void Level_BlockPlace(object sender, MiNET.Worlds.BlockPlaceEventArgs e)
         {
-            if (!this.LoginedPlayer.Contains(e.Player.Username))
+            if (!this.AccountManager.IsLogined(e.Player))
             {
                 e.Player.SendMessage("please log in first.");
                 e.Cancel = true;
@@ -47,7 +48,7 @@ namespace PrismAuth
 
         private void Level_BlockBreak(object sender, MiNET.Worlds.BlockBreakEventArgs e)
         {
-            if (!this.LoginedPlayer.Contains(e.Player.Username))
+            if (!this.AccountManager.IsLogined(e.Player))
             {
                 e.Player.SendMessage("please sure you log in first.");
                 e.Cancel = true;
@@ -56,17 +57,16 @@ namespace PrismAuth
 
         private void PlayerFactory_PlayerCreated(object sender, PlayerEventArgs e)
         {
-            e.Player.PlayerJoin += Player_PlayerJoin;
+            e.Player.PlayerJoin += Player_PlayerJoinAsync;
             e.Player.PlayerLeave += Player_PlayerLeave;
         }
 
-        private void Player_PlayerJoin(object sender, PlayerEventArgs e)
+        private async void Player_PlayerJoinAsync(object sender, PlayerEventArgs e)
         {
-            if (AccountManager.IsRegistered(e.Player.Username))
+            if (await this.AccountManager.IsRegisteredAsync(e.Player))
             {
                 Popup popup = new Popup()
                 {
-                    DisplayDelay = 5000,
                     Message = "please login first"
                 };
                 e.Player.AddPopup(popup);
@@ -75,7 +75,6 @@ namespace PrismAuth
             {
                 Popup popup = new Popup()
                 {
-                    DisplayDelay = 5000,
                     Message = "please register first"
                 };
                 e.Player.AddPopup(popup);
@@ -84,7 +83,7 @@ namespace PrismAuth
 
         private void Player_PlayerLeave(object sender, PlayerEventArgs e)
         {
-            this.LoginedPlayer.Remove(e.Player.Username);
+            this.AccountManager.DisconnectPlayer(e.Player);
         }
 
         public override void OnDisable()

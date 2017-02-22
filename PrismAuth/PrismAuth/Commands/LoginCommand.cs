@@ -19,24 +19,23 @@ namespace PrismAuth.Commands
         }
 
         [Command(Name = "login")]
-        public void Login(Player commander, string password)
+        public async void LoginAsync(Player commander, string password)
         {
-            if (this.LoginedPlayer.Exists(x => x == commander.Username))
+            if (this.AccountManager.IsLogined(commander))
             {
                 commander.SendMessage("you are already logined.");
             }
             else
             {
-                if (!AccountManager.IsRegistered(commander.Username))
+                if (!await this.AccountManager.IsRegisteredAsync(commander))
                 {
                     commander.SendMessage("please register first.");
                 }
                 else
                 {
-                    if (AccountManager.VerifyPassword(commander, password))
+                    if (await this.AccountManager.LoginPlayerAsync(commander, password))
                     {
                         commander.SendMessage("login completed");
-                        this.LoginedPlayer.Add(commander.Username);
                     }
                     else
                     {
