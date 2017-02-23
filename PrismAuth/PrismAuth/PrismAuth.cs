@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using PrismAuth.Commands;
 using PrismAuth.Handler;
 using PrismAuth.Handler.EventHandler;
+using PrismAuth.Handler.PacketHandler;
 
 namespace PrismAuth
 {
@@ -20,5 +21,6 @@ namespace PrismAuth
         PluginName = "PrismAuth", PluginVersion = "v0.1")]
     public class PrismAuth : Plugin
     {
+        public Accounts AccountManager { get; set; } = new Accounts();
     }
 }

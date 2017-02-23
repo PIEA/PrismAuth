@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.PacketHandler
 {
-    public class PlayerChat
+    public class PlayerChatPacket : BasePacketHandler
     {
-        [PacketHandler]
+        [PacketHandler, Send]
         public Package HandlePlayerChat(McpeText packet, Player target)
         {
             target.SendMessage("hello.");

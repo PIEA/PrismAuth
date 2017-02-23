@@ -8,32 +8,17 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.EventHandler
 {
-    public class PlayerJoinEvent
+    public class PlayerJoinEvent : BaseEventHandler
     {
-        private Account.Account accountManager;
-
-        public PlayerJoinEvent(Account.Account manager)
+        public void PlayerJoin(object sender, PlayerEventArgs e)
         {
-            this.accountManager = manager;
-        }
-
-        public async void PlayerJoinAsync(object sender, PlayerEventArgs e)
-        {
-            if (await this.accountManager.IsRegisteredAsync(e.Player))
+            if (this.AccountManager.IsRegistered(e.Player))
             {
-                Popup popup = new Popup()
-                {
-                    Message = "please login first"
-                };
-                e.Player.AddPopup(popup);
+                e.Player.SendMessage("plz login first.");
             }
             else
             {
-                Popup popup = new Popup()
-                {
-                    Message = "please register first"
-                };
-                e.Player.AddPopup(popup);
+                e.Player.SendMessage("plz register first.");
             }
         }
     }

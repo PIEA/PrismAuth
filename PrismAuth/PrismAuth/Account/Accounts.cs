@@ -10,68 +10,70 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Account
 {
-    public class Account
+    public class Accounts
     {
-        public static Account Manager { get; } = new Account();
+        public List<string> LoginedPlayer { get; set; }
 
-        public static List<string> LoginedPlayer { get; set; }
-
-        private Account()
+        public Accounts()
         {
-            LoginedPlayer = new List<string>();
+            this.LoginedPlayer = new List<string>();
         }
 
-        public async Task<bool> RegisterPlayerAsync(Player player, string password)
+        public bool RegisterPlayer(Player player, string password)
         {
-            var task = Task.Run(() => AddPlayer(player.Username, password));
-            var completed = await task;
+            var completed = AddPlayer(player.Username, password);
 
             if (completed)
             {
-                LoginedPlayer.Add(player.Username);
+                this.LoginedPlayer.Add(player.Username);
             }
             return completed;
         }
 
-        public async Task<bool> LoginPlayerAsync(Player player, string password)
+        public bool LoginPlayer(Player player, string password)
         {
-            var task = Task.Run(() => VerifyPassword(player.Username, password));
-            var completed = await task;
+            var completed = VerifyPassword(player.Username, password);
 
             if (completed)
             {
-                LoginedPlayer.Add(player.Username);
+                this.LoginedPlayer.Add(player.Username);
             }
             return completed;
         }
 
-        public static bool IsLogined(Player player)
+        public bool IsLogined(Player player)
         {
-            return LoginedPlayer.Exists(x => x == player.Username);
+            return this.LoginedPlayer.Exists(x => x == player.Username);
         }
 
-        public async Task<bool> IsRegisteredAsync(Player player)
+        public bool IsRegistered(Player player)
         {
-            return await Task.Run(() =>
+            var path = IO.GetFilePath(player.Username + ".json");
+            if (File.Exists(path))
             {
-                var path = IO.GetFilePath(player.Username + ".json");
-                if (File.Exists(path))
+                PlayerAccount account = null;
+                using (StreamReader file = new StreamReader(path, Encoding.Unicode))
                 {
-                    PlayerAccount account = null;
-                    using (StreamReader file = new StreamReader(path, Encoding.Unicode))
-                    {
-                        JsonSerializer serializer = new JsonSerializer();
-                        account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
-                    }
-
-                    if (account != null)
-                    {
-                        return true;
-                    }
+                    JsonSerializer serializer = new JsonSerializer();
+                    account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
                 }
 
-                return false;
-            });
+                if (account != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void RemovePlayerAccount(string userName)
+        {
+            var path = IO.GetFilePath(userName + ".json");
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
         }
 
         private bool AddPlayer(string userName, string password)
@@ -100,23 +102,6 @@ namespace PrismAuth.Account
             }
 
             return completed;
-        }
-
-        private void RemovePlayer(string userName)
-        {
-            var path = IO.GetFilePath(userName + ".json");
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
-
-        private async Task RemoveAsync(string userName)
-        {
-            var task = Task.Run(() => RemovePlayer(userName));
-
-            await task;
-            return;
         }
 
         private bool VerifyPassword(string targetName, string password)

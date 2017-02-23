@@ -10,7 +10,7 @@ using PrismAuth.Account;
 
 namespace PrismAuth.Commands
 {
-    public class LoginCommand : global::PrismAuth
+    public class LoginCommand : BaseCommand
     {
         [Command(Name = "login")]
         public void Login(Player commander)
@@ -19,21 +19,21 @@ namespace PrismAuth.Commands
         }
 
         [Command(Name = "login")]
-        public async void LoginAsync(Player commander, string password)
+        public void Login(Player commander, string password)
         {
-            if (Account.Account.IsLogined(commander))
+            if (this.AccountManager.IsLogined(commander))
             {
                 commander.SendMessage("you are already logined.");
             }
             else
             {
-                if (!await this.AccountManager.IsRegisteredAsync(commander))
+                if (!this.AccountManager.IsRegistered(commander))
                 {
                     commander.SendMessage("please register first.");
                 }
                 else
                 {
-                    if (await this.AccountManager.LoginPlayerAsync(commander, password))
+                    if (this.AccountManager.LoginPlayer(commander, password))
                     {
                         commander.SendMessage("login completed");
                     }

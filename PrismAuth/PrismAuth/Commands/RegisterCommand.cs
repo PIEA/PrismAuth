@@ -11,8 +11,9 @@ using PrismAuth.Account;
 
 namespace PrismAuth.Commands
 {
-    public class RegisterCommand
+    public class RegisterCommand : BaseCommand
     {
+
         [Command(Name = "reg")]
         public void Register(Player commander)
         {
@@ -20,17 +21,17 @@ namespace PrismAuth.Commands
         }
 
         [Command(Name = "reg")]
-        public async void RegisterAsync(Player commander, string password)
+        public void Register(Player commander, string password)
         {
             commander.SendMessage("this is register command.");
-            if (await this.AccountManager.IsRegisteredAsync(commander))
+            if (this.AccountManager.IsRegistered(commander))
             {
                 commander.SendMessage("you are already registered.");
                 return;
             }
             else
             {
-                if (await this.AccountManager.RegisterPlayerAsync(commander, password))
+                if (this.AccountManager.RegisterPlayer(commander, password))
                 {
                     commander.SendMessage("successfully registered.");
                 }
