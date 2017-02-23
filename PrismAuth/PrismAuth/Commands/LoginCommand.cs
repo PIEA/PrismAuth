@@ -44,5 +44,17 @@ namespace PrismAuth.Commands
                 }
             }
         }
+#if DEBUG
+        [Command(Name = "logined")]
+        public void Logined(Player commander)
+        {
+            foreach (var name in Accounts.LoginedPlayer)
+            {
+                commander.SendMessage(name);
+            }
+
+            commander.SendMessage("end.");
+        }
+#endif
     }
 }

@@ -101,4 +101,7 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy D:\Workspace\PrismAuth\PrismAuth\PrismAuth\bin\Debug\PrismAuth.dll D:\Workspace\MiNET-Launcher\Plugins</PostBuildEvent>
+  </PropertyGroup>
 </Project>

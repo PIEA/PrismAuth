@@ -12,7 +12,7 @@ namespace PrismAuth.Handler.EventHandler
     {
         public void PlayerLeave(object sender, PlayerEventArgs e)
         {
-            this.AccountManager.LoginedPlayer.Remove(e.Player.Username);
+            this.AccountManager.LogoutPlayer(e.Player.Username);
         }
     }
 }

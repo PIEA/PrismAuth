@@ -12,11 +12,11 @@ namespace PrismAuth.Account
 {
     public class Accounts
     {
-        public List<string> LoginedPlayer { get; set; }
+        public static List<string> LoginedPlayer;
 
         public Accounts()
         {
-            this.LoginedPlayer = new List<string>();
+            LoginedPlayer = new List<string>();
         }
 
         public bool RegisterPlayer(Player player, string password)
@@ -25,7 +25,7 @@ namespace PrismAuth.Account
 
             if (completed)
             {
-                this.LoginedPlayer.Add(player.Username);
+                LoginedPlayer.Add(player.Username);
             }
             return completed;
         }
@@ -36,14 +36,14 @@ namespace PrismAuth.Account
 
             if (completed)
             {
-                this.LoginedPlayer.Add(player.Username);
+                LoginedPlayer.Add(player.Username);
             }
             return completed;
         }
 
         public bool IsLogined(Player player)
         {
-            return this.LoginedPlayer.Exists(x => x == player.Username);
+            return LoginedPlayer.Exists(x => x == player.Username);
         }
 
         public bool IsRegistered(Player player)
@@ -65,6 +65,11 @@ namespace PrismAuth.Account
             }
 
             return false;
+        }
+
+        public void LogoutPlayer(string userName)
+        {
+            LoginedPlayer.Remove(userName);
         }
 
         public void RemovePlayerAccount(string userName)
