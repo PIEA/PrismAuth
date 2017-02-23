@@ -11,10 +11,16 @@ namespace PrismAuth.Handler.PacketHandler
 {
     public class PlayerChatPacket : BasePacketHandler
     {
-        [PacketHandler, Send]
+        [PacketHandler, Receive]
         public Package HandlePlayerChat(McpeText packet, Player target)
         {
-            target.SendMessage("hello.");
+            if (!this.AccountManager.IsLogined(target))
+            {
+                target.SendMessage("please login first.");
+
+                return null;
+            }
+
             return packet;
         }
     }
