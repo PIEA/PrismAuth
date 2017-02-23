@@ -16,8 +16,24 @@ namespace PrismAuth.Handler.PacketHandler
         {
             if (!this.AccountManager.IsLogined(target))
             {
-                target.SendMessage("please login first.");
+                var msg = packet.message;
+                if (msg.StartsWith("/"))
+                {
+                    msg = msg.Remove(0, 1);
+                    if (string.IsNullOrWhiteSpace(msg))
+                    {
+                        return null;
+                    }
+                    var msgs = msg.Split(' ').ToList();
 
+                    var first = msgs.First();
+                    if (first == "reg" || first == "login")
+                    {
+                        return packet;
+                    }
+                }
+
+                target.SendMessage("please login first.");
                 return null;
             }
 
