@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.EventHandler
 {
-    public class EventHandlerLoader : PrismAuth
+    public class EventLoader : PrismAuth
     {
         protected override void OnEnable()
         {

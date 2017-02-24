@@ -82,7 +82,7 @@
     <Compile Include="Handler\EventHandler\BaseEventHandler.cs" />
     <Compile Include="Handler\EventHandler\BlockBreakEvent.cs" />
     <Compile Include="Handler\EventHandler\BlockPlaceEvent.cs" />
-    <Compile Include="Handler\EventHandler\EventHandlerLoader.cs" />
+    <Compile Include="Handler\EventHandler\EventLoader.cs" />
     <Compile Include="Handler\EventHandler\PlayerJoinEvent.cs" />
     <Compile Include="Handler\EventHandler\PlayerLeaveEvent.cs" />
     <Compile Include="Handler\PacketHandler\BasePacketHandler.cs" />
