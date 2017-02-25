@@ -86,6 +86,8 @@
     <Compile Include="Handler\EventHandler\PlayerJoinEvent.cs" />
     <Compile Include="Handler\EventHandler\PlayerLeaveEvent.cs" />
     <Compile Include="Handler\PacketHandler\BasePacketHandler.cs" />
+    <Compile Include="Handler\PacketHandler\CommandStepPacket.cs" />
+    <Compile Include="Handler\PacketHandler\ItemFrameDropPacket.cs" />
     <Compile Include="Handler\PacketHandler\PlayerChatPacket.cs" />
     <Compile Include="PrismAuth.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

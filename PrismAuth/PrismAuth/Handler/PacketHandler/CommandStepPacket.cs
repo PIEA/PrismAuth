@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.PacketHandler
 {
-    public class PlayerChatPacket : BasePacketHandler
+    public class CommandStepPacket : BasePacketHandler
     {
-        [PacketHandler, Receive]
-        public Package HandlePlayerChat(McpeText packet, Player target)
+        [PacketHandler]
+        public Package HandleCommandStep(McpeCommandStep packet, Player target)
         {
+            // TODO: reg, login 명령어 제외
             if (!this.AccountManager.IsLogined(target))
             {
                 target.SendMessage("please login first.");

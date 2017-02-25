@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.PacketHandler
 {
-    public class PlayerChatPacket : BasePacketHandler
+    public class ItemFrameDropPacket : BasePacketHandler
     {
-        [PacketHandler, Receive]
-        public Package HandlePlayerChat(McpeText packet, Player target)
+        [PacketHandler]
+        public Package HandleItemFrameDrop(McpeItemFramDropItem packet, Player target)
         {
             if (!this.AccountManager.IsLogined(target))
             {
