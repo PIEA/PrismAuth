@@ -7,6 +7,8 @@ using MiNET;
 using MiNET.Plugins;
 using MiNET.Plugins.Attributes;
 using PrismAuth.Account;
+using MiNET.Utils;
+using PrismAuth.Resources;
 
 namespace PrismAuth.Commands
 {
@@ -15,7 +17,7 @@ namespace PrismAuth.Commands
         [Command(Name = "login")]
         public void Login(Player commander)
         {
-            commander.SendMessage("/login (password)");
+            commander.SendMessage(ChatColors.Gray + StringResource.LoginHint);
         }
 
         [Command(Name = "login")]
@@ -23,23 +25,23 @@ namespace PrismAuth.Commands
         {
             if (this.AccountManager.IsLogined(commander))
             {
-                commander.SendMessage("you are already logined.");
+                commander.SendMessage(ChatColors.Yellow + StringResource.AlreadyLogined);
             }
             else
             {
                 if (!this.AccountManager.IsRegistered(commander))
                 {
-                    commander.SendMessage("please register first.");
+                    commander.SendMessage(ChatColors.Yellow + StringResource.DoNotRegistered);
                 }
                 else
                 {
                     if (this.AccountManager.LoginPlayer(commander, password))
                     {
-                        commander.SendMessage("login completed");
+                        commander.SendMessage(ChatColors.Green + StringResource.CompletedLogin);
                     }
                     else
                     {
-                        commander.SendMessage("password not incorrect!");
+                        commander.SendMessage(ChatColors.Red + StringResource.NotIncorrectPasswd);
                     }
                 }
             }

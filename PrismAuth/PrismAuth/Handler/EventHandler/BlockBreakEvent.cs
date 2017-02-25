@@ -1,4 +1,6 @@
-﻿using PrismAuth.Account;
+﻿using MiNET.Utils;
+using PrismAuth.Account;
+using PrismAuth.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace PrismAuth.Handler.EventHandler
         {
             if (!this.AccountManager.IsLogined(e.Player))
             {
-                e.Player.SendMessage("please log in first.");
+                e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 e.Cancel = true;
             }
         }

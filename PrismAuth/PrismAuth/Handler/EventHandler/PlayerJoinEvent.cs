@@ -1,5 +1,7 @@
 ﻿using MiNET;
+using MiNET.Utils;
 using PrismAuth.Account;
+using PrismAuth.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +16,11 @@ namespace PrismAuth.Handler.EventHandler
         {
             if (this.AccountManager.IsRegistered(e.Player))
             {
-                e.Player.SendMessage("plz login first.");
+                e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
             }
             else
             {
-                e.Player.SendMessage("plz register first.");
+                e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotRegistered);
             }
         }
     }

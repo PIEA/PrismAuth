@@ -1,6 +1,8 @@
 ﻿using MiNET;
 using MiNET.Net;
 using MiNET.Plugins.Attributes;
+using MiNET.Utils;
+using PrismAuth.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,7 @@ namespace PrismAuth.Handler.PacketHandler
         {
             if (!this.AccountManager.IsLogined(target))
             {
-                target.SendMessage("please login first.");
+                target.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 return null;
             }
 
