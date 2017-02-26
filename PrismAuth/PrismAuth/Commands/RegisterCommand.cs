@@ -23,7 +23,7 @@ namespace PrismAuth.Commands
         }
 
         [Command(Name = "reg")]
-        public void Register(Player commander, string password)
+        public void Register(Player commander, params string[] args)
         {
             if (this.AccountManager.IsLogined(commander))
             {
@@ -33,7 +33,7 @@ namespace PrismAuth.Commands
             {
                 if (!this.AccountManager.IsRegistered(commander))
                 {
-                    if (this.AccountManager.RegisterPlayer(commander, password))
+                    if (this.AccountManager.RegisterPlayer(commander, args[0]))
                     {
                         commander.SendMessage(ChatColors.Green + StringResource.CompletedRegister);
                     }

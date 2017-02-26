@@ -88,6 +88,7 @@
     <Compile Include="Handler\PacketHandler\BasePacketHandler.cs" />
     <Compile Include="Handler\PacketHandler\CommandStepPacket.cs" />
     <Compile Include="Handler\PacketHandler\DropItemPacket.cs" />
+    <Compile Include="Handler\PacketHandler\InteractPacket.cs" />
     <Compile Include="Handler\PacketHandler\PlayerChatPacket.cs" />
     <Compile Include="Handler\PacketHandler\UseItemPacket.cs" />
     <Compile Include="PluginLoader.cs" />

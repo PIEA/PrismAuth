@@ -11,17 +11,13 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.PacketHandler
 {
-    public class CommandStepPacket : BasePacketHandler
+    public class InteractPacket : BasePacketHandler
     {
         [PacketHandler]
-        public Package HandleCommandStep(McpeCommandStep packet, Player target)
+        public Package HandleInteract(McpeInteract packet, Player target)
         {
             if (!this.AccountManager.IsLogined(target))
             {
-                if (packet.commandName == "reg" || packet.commandName == "login")
-                {
-                    return packet;
-                }
                 target.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 return null;
             }

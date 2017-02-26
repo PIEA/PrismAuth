@@ -21,7 +21,7 @@ namespace PrismAuth.Commands
         }
 
         [Command(Name = "login")]
-        public void Login(Player commander, string password)
+        public void Login(Player commander, params string[] args)
         {
             if (this.AccountManager.IsLogined(commander))
             {
@@ -35,7 +35,7 @@ namespace PrismAuth.Commands
                 }
                 else
                 {
-                    if (this.AccountManager.LoginPlayer(commander, password))
+                    if (this.AccountManager.LoginPlayer(commander, args[0]))
                     {
                         commander.SendMessage(ChatColors.Green + StringResource.CompletedLogin);
                     }

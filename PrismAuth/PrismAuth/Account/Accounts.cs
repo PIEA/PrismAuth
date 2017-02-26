@@ -86,7 +86,6 @@ namespace PrismAuth.Account
             var completed = false;
             try
             {
-                // error
                 var path = IO.GetFilePath(userName + ".json");
                 if (!File.Exists(path))
                 {
@@ -96,6 +95,7 @@ namespace PrismAuth.Account
                 {
                     var account = new PlayerAccount() { Password = digest };
                     var json = JsonConvert.SerializeObject(account, Formatting.Indented);
+                    // error
                     File.WriteAllText(path, json, Encoding.Unicode);
                     completed = true;
                 }

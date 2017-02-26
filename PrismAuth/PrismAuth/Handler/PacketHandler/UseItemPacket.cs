@@ -19,7 +19,7 @@ namespace PrismAuth.Handler.PacketHandler
             if (!this.AccountManager.IsLogined(target))
             {
                 target.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
-                return null;
+                return packet;
             }
 
             return packet;
