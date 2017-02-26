@@ -19,6 +19,10 @@ namespace PrismAuth.Handler.PacketHandler
             // TODO: reg, login 명령어 제외
             if (!this.AccountManager.IsLogined(target))
             {
+                if (packet.commandName == "reg" || packet.commandName == "login")
+                {
+                    return packet;
+                }
                 target.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 return null;
             }

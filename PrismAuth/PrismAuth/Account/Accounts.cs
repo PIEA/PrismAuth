@@ -86,7 +86,7 @@ namespace PrismAuth.Account
             var completed = false;
             try
             {
-                
+                // error
                 var path = IO.GetFilePath(userName + ".json");
                 if (!File.Exists(path))
                 {
