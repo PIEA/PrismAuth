@@ -22,13 +22,13 @@ namespace PrismAuth.Commands
             this.context = context;
         }
 
-        [Command(Name = "reg")]
+        [Command(Aliases = new string[] { "reg" }, Description = "Shows register command hint")]
         public void Register(Player commander)
         {
             commander.SendMessage(ChatColors.Gray + StringResource.RegisterHint);
         }
 
-        [Command(Name = "reg")]
+        [Command(Aliases = new string[] { "reg" }, Description = "Register to server.")]
         public void Register(Player commander, params string[] args)
         {
             if (AccountManager.IsLogined(commander))
