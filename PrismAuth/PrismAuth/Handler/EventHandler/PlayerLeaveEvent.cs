@@ -8,11 +8,11 @@ using PrismAuth.Account;
 
 namespace PrismAuth.Handler.EventHandler
 {
-    public class PlayerLeaveEvent : BaseEventHandler
+    public class PlayerLeaveEvent
     {
         public void PlayerLeave(object sender, PlayerEventArgs e)
         {
-            this.AccountManager.LogoutPlayer(e.Player.Username);
+            AccountManager.LogoutPlayer(e.Player);
         }
     }
 }

@@ -2,6 +2,7 @@
 using MiNET.Net;
 using MiNET.Plugins.Attributes;
 using MiNET.Utils;
+using PrismAuth.Account;
 using PrismAuth.Resources;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.PacketHandler
 {
-    public class InteractPacket : BasePacketHandler
+    public class InteractPacket
     {
         [PacketHandler]
         public Package HandleInteract(McpeInteract packet, Player target)
         {
-            if (!this.AccountManager.IsLogined(target))
+            if (!AccountManager.IsLogined(target))
             {
                 target.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 return null;

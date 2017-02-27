@@ -12,8 +12,15 @@ using PrismAuth.Resources;
 
 namespace PrismAuth.Commands
 {
-    public class LoginCommand : BaseCommand
+    public class LoginCommand
     {
+        private PluginContext context;
+
+        public LoginCommand(PluginContext context)
+        {
+            this.context = context;
+        }
+
         [Command(Name = "login")]
         public void Login(Player commander)
         {
@@ -23,19 +30,19 @@ namespace PrismAuth.Commands
         [Command(Name = "login")]
         public void Login(Player commander, params string[] args)
         {
-            if (this.AccountManager.IsLogined(commander))
+            if (AccountManager.IsLogined(commander))
             {
                 commander.SendMessage(ChatColors.Yellow + StringResource.AlreadyLogined);
             }
             else
             {
-                if (!this.AccountManager.IsRegistered(commander))
+                if (!AccountManager.IsRegistered(commander))
                 {
                     commander.SendMessage(ChatColors.Yellow + StringResource.DoNotRegistered);
                 }
                 else
                 {
-                    if (this.AccountManager.LoginPlayer(commander, args[0]))
+                    if (AccountManager.LoginPlayer(commander, args[0]))
                     {
                         commander.SendMessage(ChatColors.Green + StringResource.CompletedLogin);
                     }
@@ -50,9 +57,9 @@ namespace PrismAuth.Commands
         [Command(Name = "logined")]
         public void Logined(Player commander)
         {
-            foreach (var name in Accounts.LoginedPlayer)
+            foreach (var name in AccountManager.LoginedPlayer)
             {
-                commander.SendMessage(name);
+                commander.SendMessage(name.Key);
             }
 
             commander.SendMessage("end.");

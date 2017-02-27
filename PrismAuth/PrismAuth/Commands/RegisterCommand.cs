@@ -13,8 +13,14 @@ using PrismAuth.Resources;
 
 namespace PrismAuth.Commands
 {
-    public class RegisterCommand : BaseCommand
+    public class RegisterCommand
     {
+        private PluginContext context;
+
+        public RegisterCommand(PluginContext context)
+        {
+            this.context = context;
+        }
 
         [Command(Name = "reg")]
         public void Register(Player commander)
@@ -25,15 +31,15 @@ namespace PrismAuth.Commands
         [Command(Name = "reg")]
         public void Register(Player commander, params string[] args)
         {
-            if (this.AccountManager.IsLogined(commander))
+            if (AccountManager.IsLogined(commander))
             {
                 commander.SendMessage(ChatColors.Yellow + StringResource.AlreadyLogined);
             }
             else
             {
-                if (!this.AccountManager.IsRegistered(commander))
+                if (!AccountManager.IsRegistered(commander))
                 {
-                    if (this.AccountManager.RegisterPlayer(commander, args[0]))
+                    if (AccountManager.RegisterPlayer(commander, args[0]))
                     {
                         commander.SendMessage(ChatColors.Green + StringResource.CompletedRegister);
                     }

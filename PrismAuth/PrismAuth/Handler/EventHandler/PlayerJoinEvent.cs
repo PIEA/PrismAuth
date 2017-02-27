@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.EventHandler
 {
-    public class PlayerJoinEvent : BaseEventHandler
+    public class PlayerJoinEvent
     {
         public void PlayerJoin(object sender, PlayerEventArgs e)
         {
-            if (this.AccountManager.IsRegistered(e.Player))
+            if (AccountManager.IsRegistered(e.Player))
             {
                 e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
             }

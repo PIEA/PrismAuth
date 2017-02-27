@@ -7,46 +7,42 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace PrismAuth.Account
 {
-    public class Accounts
+    public static class AccountManager
     {
-        public static List<string> LoginedPlayer;
+        public static ConcurrentDictionary<string, Player> LoginedPlayer = new ConcurrentDictionary<string, Player>();
 
-        public Accounts()
-        {
-            LoginedPlayer = new List<string>();
-        }
-
-        public bool RegisterPlayer(Player player, string password)
+        public static bool RegisterPlayer(Player player, string password)
         {
             var completed = AddPlayer(player.Username, password);
 
             if (completed)
             {
-                LoginedPlayer.Add(player.Username);
+                LoginedPlayer.TryAdd(player.Username, player);
             }
             return completed;
         }
 
-        public bool LoginPlayer(Player player, string password)
+        public static bool LoginPlayer(Player player, string password)
         {
             var completed = VerifyPassword(player.Username, password);
 
             if (completed)
             {
-                LoginedPlayer.Add(player.Username);
+                LoginedPlayer.TryAdd(player.Username, player);
             }
             return completed;
         }
 
-        public bool IsLogined(Player player)
+        public static bool IsLogined(Player player)
         {
-            return LoginedPlayer.Exists(x => x == player.Username);
+            return LoginedPlayer.Keys.Contains(player.Username);
         }
 
-        public bool IsRegistered(Player player)
+        public static bool IsRegistered(Player player)
         {
             var path = IO.GetFilePath(player.Username + ".json");
             if (File.Exists(path))
@@ -67,12 +63,12 @@ namespace PrismAuth.Account
             return false;
         }
 
-        public void LogoutPlayer(string userName)
+        public static void LogoutPlayer(Player player)
         {
-            LoginedPlayer.Remove(userName);
+            LoginedPlayer.TryRemove(player.Username, out player);
         }
 
-        public void RemovePlayerAccount(string userName)
+        public static void RemovePlayerAccount(string userName)
         {
             var path = IO.GetFilePath(userName + ".json");
             if (File.Exists(path))
@@ -81,7 +77,7 @@ namespace PrismAuth.Account
             }
         }
 
-        private bool AddPlayer(string userName, string password)
+        private static bool AddPlayer(string userName, string password)
         {
             var completed = false;
             try
@@ -109,7 +105,7 @@ namespace PrismAuth.Account
             return completed;
         }
 
-        private bool VerifyPassword(string targetName, string password)
+        private static bool VerifyPassword(string targetName, string password)
         {
             var verify = false;
 
@@ -132,7 +128,7 @@ namespace PrismAuth.Account
             return verify;
         }
 
-        private bool TryEncryptPassword(string passwd, out string digest)
+        private static bool TryEncryptPassword(string passwd, out string digest)
         {
             digest = null;
             try
@@ -147,7 +143,7 @@ namespace PrismAuth.Account
             return true;
         }
 
-        private bool VerifyDigest(string passwd, string digest)
+        private static bool VerifyDigest(string passwd, string digest)
         {
             var verify = false;
             try

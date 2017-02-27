@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace PrismAuth.Handler.EventHandler
 {
-    public class BlockBreakEvent : BaseEventHandler
+    public class BlockBreakEvent
     {
         public void BlockBreak(object sender, MiNET.Worlds.BlockBreakEventArgs e)
         {
-            if (!this.AccountManager.IsLogined(e.Player))
+            if (!AccountManager.IsLogined(e.Player))
             {
                 e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 e.Cancel = true;
