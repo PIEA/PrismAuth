@@ -21,13 +21,13 @@ namespace PrismAuth.Commands
             this.context = context;
         }
 
-        [Command(Name = "login")]
+        [Command(Description = "Shows login command hint.")]
         public void Login(Player commander)
         {
             commander.SendMessage(ChatColors.Gray + StringResource.LoginHint);
         }
 
-        [Command(Name = "login")]
+        [Command(Description = "Login to server.")]
         public void Login(Player commander, params string[] args)
         {
             if (AccountManager.LoginedPlayer.Keys.Contains(commander.Username))
