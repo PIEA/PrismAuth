@@ -103,4 +103,28 @@
   <data name="DoNotRegistered" xml:space="preserve">
     <value>가입이 되어 있지 않습니다. 가입을 먼저 해야 합니다.</value>
   </data>
+  <data name="AlreadyLogined" xml:space="preserve">
+    <value>이미 로그인 되어 있습니다.</value>
+  </data>
+  <data name="AlreadyRegistered" xml:space="preserve">
+    <value>이미 가입 되어 있습니다.</value>
+  </data>
+  <data name="CompletedLogin" xml:space="preserve">
+    <value>성공적으로 로그인 하였습니다.</value>
+  </data>
+  <data name="CompletedRegister" xml:space="preserve">
+    <value>성공적으로 가입 하였습니다.</value>
+  </data>
+  <data name="FaildRegister" xml:space="preserve">
+    <value>가입에 실패했습니다.</value>
+  </data>
+  <data name="LoginHint" xml:space="preserve">
+    <value>힌트: /login [비밀번호]</value>
+  </data>
+  <data name="NotIncorrectPasswd" xml:space="preserve">
+    <value>비밀번호가 맞지 않습니다!</value>
+  </data>
+  <data name="RegisterHint" xml:space="preserve">
+    <value>힌트: /reg [비밀번호]</value>
+  </data>
 </root>

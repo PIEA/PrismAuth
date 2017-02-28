@@ -142,7 +142,7 @@ namespace PrismAuth.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hint: /register [password].
+        ///   Looks up a localized string similar to hint: /reg [password].
         /// </summary>
         public static string RegisterHint {
             get {

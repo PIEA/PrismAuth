@@ -145,6 +145,6 @@
     <value>Password not incorrect!</value>
   </data>
   <data name="RegisterHint" xml:space="preserve">
-    <value>hint: /register [password]</value>
+    <value>hint: /reg [password]</value>
   </data>
 </root>
