@@ -13,7 +13,7 @@ namespace PrismAuth.Handler.EventHandler
     {
         public void BlockBreak(object sender, MiNET.Worlds.BlockBreakEventArgs e)
         {
-            if (!AccountManager.IsLogined(e.Player))
+            if (!AccountManager.LoginedPlayer.Keys.Contains(e.Player.Username))
             {
                 e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 e.Cancel = true;

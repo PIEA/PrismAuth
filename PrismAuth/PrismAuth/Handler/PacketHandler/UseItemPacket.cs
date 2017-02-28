@@ -17,7 +17,7 @@ namespace PrismAuth.Handler.PacketHandler
         [PacketHandler]
         public Package HandleUseItem(McpeUseItem packet, Player target)
         {
-            if (!AccountManager.IsLogined(target))
+            if (!AccountManager.LoginedPlayer.Keys.Contains(target.Username))
             {
                 target.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
                 return packet;

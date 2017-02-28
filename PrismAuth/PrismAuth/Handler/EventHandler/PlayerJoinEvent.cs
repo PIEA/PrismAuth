@@ -14,13 +14,9 @@ namespace PrismAuth.Handler.EventHandler
     {
         public void PlayerJoin(object sender, PlayerEventArgs e)
         {
-            if (AccountManager.IsRegistered(e.Player))
+            if (!AccountManager.LoginedPlayer.Keys.Contains(e.Player.Username))
             {
                 e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotLogined);
-            }
-            else
-            {
-                e.Player.SendMessage(ChatColors.Yellow + StringResource.DoNotRegistered);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace PrismAuth.Handler.PacketHandler
         [PacketHandler]
         public Package HandleCommandStep(McpeCommandStep packet, Player target)
         {
-            if (!AccountManager.IsLogined(target))
+            if (!AccountManager.LoginedPlayer.Keys.Contains(target.Username))
             {
                 if (packet.commandName == "reg" || packet.commandName == "login")
                 {

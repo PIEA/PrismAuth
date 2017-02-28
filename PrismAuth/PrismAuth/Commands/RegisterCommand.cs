@@ -10,6 +10,7 @@ using PrismAuth;
 using PrismAuth.Account;
 using MiNET.Utils;
 using PrismAuth.Resources;
+using PrismAuth.Util;
 
 namespace PrismAuth.Commands
 {
@@ -31,28 +32,21 @@ namespace PrismAuth.Commands
         [Command(Aliases = new string[] { "reg" }, Description = "Register to server.")]
         public void Register(Player commander, params string[] args)
         {
-            if (AccountManager.IsLogined(commander))
+            if (AccountManager.LoginedPlayer.Keys.Contains(commander.Username))
             {
                 commander.SendMessage(ChatColors.Yellow + StringResource.AlreadyLogined);
+                return;
+            }
+
+            var result = AccountManager.RegisterPlayer(commander, args[0]);
+            if (result.Successed)
+            {
+                commander.SendMessage(ChatColors.Green + StringResource.CompletedRegister);
             }
             else
             {
-                if (!AccountManager.IsRegistered(commander))
-                {
-                    if (AccountManager.RegisterPlayer(commander, args[0]))
-                    {
-                        commander.SendMessage(ChatColors.Green + StringResource.CompletedRegister);
-                    }
-                    else
-                    {
-                        commander.SendMessage(ChatColors.Red + StringResource.FaildRegister);
-                    }
-                }
-                else
-                {
-                    commander.SendMessage(ChatColors.Yellow + StringResource.AlreadyRegistered);
-                    return;
-                }
+                commander.SendMessage(ChatColors.Red + StringResource.FaildRegister);
+                commander.SendMessage(ChatColors.Red + result.Message);
             }
         }
     }

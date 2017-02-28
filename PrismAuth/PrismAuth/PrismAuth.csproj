@@ -90,7 +90,8 @@
     <Compile Include="PrismAuthPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ContextConstants.cs" />
-    <Compile Include="Util\IO.cs" />
+    <Compile Include="Util\PrismAuthIO.cs" />
+    <Compile Include="Util\Result.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

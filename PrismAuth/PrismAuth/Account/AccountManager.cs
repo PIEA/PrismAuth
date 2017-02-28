@@ -8,124 +8,85 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Threading;
+using PrismAuth.Resources;
 
 namespace PrismAuth.Account
 {
     public static class AccountManager
     {
+        /// <summary>
+        /// Key = 플레이어 이름, Value = 플레이어 데이터
+        /// </summary>
         public static ConcurrentDictionary<string, Player> LoginedPlayer = new ConcurrentDictionary<string, Player>();
 
-        public static bool RegisterPlayer(Player player, string password)
+        public static Result RegisterPlayer(Player player, string password)
         {
-            var completed = AddPlayer(player.Username, password);
+            var result = new Result();
+            var path = PrismAuthIO.GetFilePath(player.Username + ".json");
 
-            if (completed)
+            if (File.Exists(path))
+            {
+                var read = PrismAuthIO.ReadJsonFromFile(path);
+
+                if (read.Data != null)
+                {
+                    result.Message = StringResource.AlreadyRegistered;
+                    result.Successed = false;
+
+                    return result;
+                }
+            }
+
+            if (TryEncryptPassword(password, out string digest))
+            {
+                var account = new PlayerAccount() { Password = digest };
+                var json = JsonConvert.SerializeObject(account, Formatting.Indented);
+                result = PrismAuthIO.WriteJsonToFile(path, json);
+            }
+
+            if (result.Successed)
             {
                 LoginedPlayer.TryAdd(player.Username, player);
             }
-            return completed;
+            return result;
         }
 
-        public static bool LoginPlayer(Player player, string password)
+        public static Result LoginPlayer(Player player, string password)
         {
-            var completed = VerifyPassword(player.Username, password);
+            var result = new Result();
 
-            if (completed)
+            var path = PrismAuthIO.GetFilePath(player.Username + ".json");
+            if (File.Exists(path))
+            {
+                var read = PrismAuthIO.ReadJsonFromFile(path);
+
+                if (read.Data != null)
+                {
+                    try
+                    {
+                        result.Successed = BCrypt.Net.BCrypt.Verify(password, read.Data.Password);
+
+                        if (!result.Successed)
+                        {
+                            result.Message = StringResource.NotIncorrectPasswd;
+                        }
+                    }
+                    catch (BCrypt.Net.SaltParseException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        result.Message = ex.Message;
+                        result.Successed = false;
+                    }
+                }
+            }
+
+            if (result.Successed)
             {
                 LoginedPlayer.TryAdd(player.Username, player);
             }
-            return completed;
-        }
 
-        public static bool IsLogined(Player player)
-        {
-            return LoginedPlayer.Keys.Contains(player.Username);
-        }
-
-        public static bool IsRegistered(Player player)
-        {
-            var path = IO.GetFilePath(player.Username + ".json");
-            if (File.Exists(path))
-            {
-                PlayerAccount account = null;
-                using (StreamReader file = new StreamReader(path, Encoding.Unicode))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
-                }
-
-                if (account != null)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static void LogoutPlayer(Player player)
-        {
-            LoginedPlayer.TryRemove(player.Username, out player);
-        }
-
-        public static void RemovePlayerAccount(string userName)
-        {
-            var path = IO.GetFilePath(userName + ".json");
-            if (File.Exists(path))
-            {
-                File.Delete(path);
-            }
-        }
-
-        private static bool AddPlayer(string userName, string password)
-        {
-            var completed = false;
-            try
-            {
-                var path = IO.GetFilePath(userName + ".json");
-                if (!File.Exists(path))
-                {
-                    File.Create(path);
-                }
-                if (TryEncryptPassword(password, out string digest))
-                {
-                    var account = new PlayerAccount() { Password = digest };
-                    var json = JsonConvert.SerializeObject(account, Formatting.Indented);
-                    // error
-                    File.WriteAllText(path, json, Encoding.Unicode);
-                    completed = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                completed = false;
-            }
-
-            return completed;
-        }
-
-        private static bool VerifyPassword(string targetName, string password)
-        {
-            var verify = false;
-
-            var path = IO.GetFilePath(targetName + ".json");
-            if (File.Exists(path))
-            {
-                PlayerAccount account = null;
-                using (StreamReader file = new StreamReader(path, Encoding.Unicode))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    account = (PlayerAccount)serializer.Deserialize(file, typeof(PlayerAccount));
-                }
-
-                if (account != null)
-                {
-                    verify = VerifyDigest(password, account.Password);
-                }
-            }
-
-            return verify;
+            return result;
         }
 
         private static bool TryEncryptPassword(string passwd, out string digest)
@@ -141,20 +102,6 @@ namespace PrismAuth.Account
             }
 
             return true;
-        }
-
-        private static bool VerifyDigest(string passwd, string digest)
-        {
-            var verify = false;
-            try
-            {
-                verify = BCrypt.Net.BCrypt.Verify(passwd, digest);
-            }
-            catch (BCrypt.Net.SaltParseException)
-            {
-                return false;
-            }
-            return verify;
         }
     }
 }

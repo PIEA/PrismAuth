@@ -30,27 +30,20 @@ namespace PrismAuth.Commands
         [Command(Name = "login")]
         public void Login(Player commander, params string[] args)
         {
-            if (AccountManager.IsLogined(commander))
+            if (AccountManager.LoginedPlayer.Keys.Contains(commander.Username))
             {
                 commander.SendMessage(ChatColors.Yellow + StringResource.AlreadyLogined);
+                return;
+            }
+
+            var result = AccountManager.LoginPlayer(commander, args[0]);
+            if (result.Successed)
+            {
+                commander.SendMessage(ChatColors.Green + StringResource.CompletedLogin);
             }
             else
             {
-                if (!AccountManager.IsRegistered(commander))
-                {
-                    commander.SendMessage(ChatColors.Yellow + StringResource.DoNotRegistered);
-                }
-                else
-                {
-                    if (AccountManager.LoginPlayer(commander, args[0]))
-                    {
-                        commander.SendMessage(ChatColors.Green + StringResource.CompletedLogin);
-                    }
-                    else
-                    {
-                        commander.SendMessage(ChatColors.Red + StringResource.NotIncorrectPasswd);
-                    }
-                }
+                commander.SendMessage(ChatColors.Red + result.Message);
             }
         }
 #if DEBUG
