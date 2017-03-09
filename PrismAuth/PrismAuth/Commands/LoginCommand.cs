@@ -43,6 +43,7 @@ namespace PrismAuth.Commands
             }
             else
             {
+                commander.SendMessage(ChatColors.Red + StringResource.FaildLogin);
                 commander.SendMessage(ChatColors.Red + result.Message);
             }
         }

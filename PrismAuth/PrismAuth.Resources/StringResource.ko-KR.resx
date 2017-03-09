@@ -127,4 +127,7 @@
   <data name="RegisterHint" xml:space="preserve">
     <value>힌트: /reg [비밀번호]</value>
   </data>
+  <data name="FaildLogin" xml:space="preserve">
+    <value>로그인에 실패하였습니다.</value>
+  </data>
 </root>

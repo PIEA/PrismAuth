@@ -22,8 +22,8 @@ namespace PrismAuth.Util
 
         public Result()
         {
-            this.Successed = false;
-            this.Message = "The message does not exist.";
+            Successed = false;
+            Message = "The message does not exist.";
         }
     }
 }

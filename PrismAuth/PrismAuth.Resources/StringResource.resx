@@ -147,4 +147,7 @@
   <data name="RegisterHint" xml:space="preserve">
     <value>hint: /reg [password]</value>
   </data>
+  <data name="FaildLogin" xml:space="preserve">
+    <value>Failed to login.</value>
+  </data>
 </root>

@@ -41,13 +41,13 @@ namespace PrismAuth
 
         private void LoadEventHandlers()
         {
-            this.Context.Server.PlayerFactory.PlayerCreated += (sender, e) =>
+            Context.Server.PlayerFactory.PlayerCreated += (sender, e) =>
             {
                 e.Player.PlayerJoin += new PlayerJoinEvent().PlayerJoin;
                 e.Player.PlayerLeave += new PlayerLeaveEvent().PlayerLeave;
             };
 
-            this.Context.Server.LevelManager.LevelCreated += (sender, e) =>
+            Context.Server.LevelManager.LevelCreated += (sender, e) =>
             {
                 e.Level.BlockBreak += new BlockBreakEvent().BlockBreak;
                 e.Level.BlockPlace += new BlockPlaceEvent().BlockPlace;
@@ -56,17 +56,17 @@ namespace PrismAuth
 
         private void LoadpacketHandlers()
         {
-            this.Context.PluginManager.LoadPacketHandlers(new CommandStepPacket());
-            this.Context.PluginManager.LoadPacketHandlers(new DropItemPacket());
-            this.Context.PluginManager.LoadPacketHandlers(new InteractPacket());
-            this.Context.PluginManager.LoadPacketHandlers(new PlayerChatPacket());
-            this.Context.PluginManager.LoadPacketHandlers(new UseItemPacket());
+            Context.PluginManager.LoadPacketHandlers(new CommandStepPacket());
+            Context.PluginManager.LoadPacketHandlers(new DropItemPacket());
+            Context.PluginManager.LoadPacketHandlers(new InteractPacket());
+            Context.PluginManager.LoadPacketHandlers(new PlayerChatPacket());
+            Context.PluginManager.LoadPacketHandlers(new UseItemPacket());
         }
 
         private void LoadCommands()
         {
-            this.Context.PluginManager.LoadCommands(new LoginCommand(this.Context));
-            this.Context.PluginManager.LoadCommands(new RegisterCommand(this.Context));
+            Context.PluginManager.LoadCommands(new LoginCommand(Context));
+            Context.PluginManager.LoadCommands(new RegisterCommand(Context));
         }
     }
 }
