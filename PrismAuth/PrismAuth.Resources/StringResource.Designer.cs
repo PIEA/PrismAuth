@@ -142,6 +142,15 @@ namespace PrismAuth.Resources {
         }
         
         /// <summary>
+        ///   The message does not exist.과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        public static string MessageNotExist {
+            get {
+                return ResourceManager.GetString("MessageNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Password not incorrect!과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         public static string NotIncorrectPasswd {

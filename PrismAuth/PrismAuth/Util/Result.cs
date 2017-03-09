@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PrismAuth.Resources;
 
 namespace PrismAuth.Util
 {
@@ -23,7 +24,7 @@ namespace PrismAuth.Util
         public Result()
         {
             Successed = false;
-            Message = "The message does not exist.";
+            Message = StringResource.MessageNotExist;
         }
     }
 }

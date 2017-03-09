@@ -150,4 +150,7 @@
   <data name="FaildLogin" xml:space="preserve">
     <value>Failed to login.</value>
   </data>
+  <data name="MessageNotExist" xml:space="preserve">
+    <value>The message does not exist.</value>
+  </data>
 </root>

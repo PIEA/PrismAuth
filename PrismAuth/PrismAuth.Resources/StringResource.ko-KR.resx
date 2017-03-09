@@ -130,4 +130,7 @@
   <data name="FaildLogin" xml:space="preserve">
     <value>로그인에 실패하였습니다.</value>
   </data>
+  <data name="MessageNotExist" xml:space="preserve">
+    <value>메시지가 존재하지 않습니다.</value>
+  </data>
 </root>
