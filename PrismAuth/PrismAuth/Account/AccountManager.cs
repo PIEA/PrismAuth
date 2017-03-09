@@ -80,6 +80,11 @@ namespace PrismAuth.Account
                     }
                 }
             }
+            else
+            {
+                result.Successed = false;
+                result.Message = StringResource.DoNotRegistered;
+            }
 
             if (result.Successed)
             {
