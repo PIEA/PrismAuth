@@ -15,11 +15,14 @@ namespace PrismAuth.Handler.PacketHandler
     public class CommandStepPacket
     {
         [PacketHandler]
-        public Package HandleCommandStep(McpeCommandStep packet, Player target)
+        public Package HandleCommandStep(McpeCommandRequest packet, Player target)
         {
             if (!AccountManager.LoginedPlayer.Keys.Contains(target.Username))
             {
-                if (packet.commandName == "reg" || packet.commandName == "login")
+                var command = packet.command;
+                command = command.Remove(0, 1);
+                command = command.Split(' ')[0];
+                if (command == "reg" || command == "login")
                 {
                     return packet;
                 }

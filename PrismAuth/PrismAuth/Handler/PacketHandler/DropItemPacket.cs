@@ -14,6 +14,7 @@ namespace PrismAuth.Handler.PacketHandler
 {
     public class DropItemPacket
     {
+        /*
         [PacketHandler]
         public Package HandleDropItem(McpeDropItem packet, Player target)
         {
@@ -25,5 +26,6 @@ namespace PrismAuth.Handler.PacketHandler
 
             return packet;
         }
+        */
     }
 }

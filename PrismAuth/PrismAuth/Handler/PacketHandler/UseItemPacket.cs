@@ -14,6 +14,7 @@ namespace PrismAuth.Handler.PacketHandler
 {
     public class UseItemPacket
     {
+        /*
         [PacketHandler]
         public Package HandleUseItem(McpeUseItem packet, Player target)
         {
@@ -25,5 +26,6 @@ namespace PrismAuth.Handler.PacketHandler
 
             return packet;
         }
+        */
     }
 }
